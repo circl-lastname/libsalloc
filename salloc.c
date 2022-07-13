@@ -1,7 +1,6 @@
 // libsalloc - https://github.com/circl-lastname/libsalloc
 // Licensed under MIT, see LICENSE file in above repository
 
-#include <stdbool.h>
 #include <stdlib.h>
 
 #include "salloc.h"
@@ -22,7 +21,7 @@ ascope_t* salloc() {
   return scope;
 }
 
-static inline bool ascope_push(ascope_t* scope, void* alloc) {
+int strack(ascope_t* scope, void* alloc) {
   scope->allocs[scope->allocs_count] = alloc;
   scope->allocs_count++;
   
@@ -30,17 +29,17 @@ static inline bool ascope_push(ascope_t* scope, void* alloc) {
     scope->allocs_capacity *= 2;
     scope->allocs = realloc(scope->allocs, sizeof(void*)*scope->allocs_capacity);
     if (!scope->allocs) {
-      return false;
+      return 0;
     }
   }
   
-  return true;
+  return 1;
 }
 
 void* smalloc(ascope_t* scope, size_t size) {
   void* alloc = malloc(size);
   
-  if (!ascope_push(scope, alloc)) {
+  if (!strack(scope, alloc)) {
     return NULL;
   }
   
