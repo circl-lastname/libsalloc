@@ -1,3 +1,6 @@
+// libsalloc - https://github.com/circl-lastname/libsalloc
+// Licensed under MIT, see LICENSE file in above repository
+
 #include <stdbool.h>
 #include <stdlib.h>
 
